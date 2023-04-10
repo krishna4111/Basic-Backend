@@ -1,8 +1,7 @@
 const http=require('http');
+const route=require('./routes');
+//console.log(route.someText);
 
-const server=http.createServer((req,res)=>{
-    console.log('krishna');
-    const name='my name is krishna';
-    res.end(name);
-})
-server.listen(4000);
+const server=http.createServer(route);
+
+server.listen(3000);
