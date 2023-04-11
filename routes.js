@@ -55,7 +55,7 @@ function workingWithRoutes(req,res){
 
 
 //way-1 to export
-module.exports=workingWithRoutes;
+//module.exports=workingWithRoutes;
 
 
 
