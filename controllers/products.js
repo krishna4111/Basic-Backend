@@ -1,4 +1,4 @@
-const products = [];
+const Product=require('../model/product')
 
 exports.AddProduct=(req, res, next) => {
     res.render('add-product', {
@@ -10,24 +10,29 @@ exports.AddProduct=(req, res, next) => {
     });
   }
   exports.AddProductPost=(req, res, next) => {
-    products.push({ title: req.body.title });
-    console.log(products);
+    const product=new Product(req.body.title);
+    // products.push({ title: req.body.title });
+    // console.log(products);
+    product.save();
     res.redirect('/');
   }
 
 
-  exports.shop=(req, res, next) => {
-    console.log(req.body.name);
-    console.log(req.body.email)
-    res.render('shop', {
-      prods: products,
-      pageTitle: 'Shop',
-      path: '/',
-      hasProducts: products.length > 0,
-      activeShop: true,
-      productCSS: true
-
+  exports.getProducts=(req, res, next) => {
+    Product.fetchAll((products)=>{
+      res.render('shop', {
+        prods: products,
+        pageTitle: 'Shop',
+        path: '/',
+        hasProducts: products.length > 0,
+        activeShop: true,
+        productCSS: true
+  
+      });
     });
+    // console.log(req.body.name);
+    // console.log(req.body.email)
+    
   }
   exports.contactUs=(req, res, next) => {
     res.render('contact', {
@@ -39,3 +44,12 @@ exports.AddProduct=(req, res, next) => {
     });
   }
 
+  exports.success=(req,res,next)=>{
+    res.render('success',{
+      pageTitle: 'successfully added',
+      path: '/admin/success',
+      formsCSS: true,
+      productCSS: true,
+      activeAddProduct: true
+    })
+  }

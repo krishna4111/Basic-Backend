@@ -17,4 +17,6 @@ router.get('/contact',productController.contactUs);
 // /admin/add-product => POST
 router.post('/add-product', productController.AddProductPost);
 
+router.post('/success',productController.success)
+
 exports.routes = router;

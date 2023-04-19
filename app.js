@@ -19,6 +19,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/admin', adminData.routes);
 app.use(shopRoutes);
 
-app.use(errorController.error);
+app.use('/',errorController.error);
 
 app.listen(3000);
