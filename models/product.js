@@ -1,22 +1,4 @@
-const fs = require('fs');
-const path = require('path');
-
-const p = path.join(
-  path.dirname(process.mainModule.filename),
-  'data',
-  'products.json'
-);
-
-const getProductsFromFile = cb => {
-  fs.readFile(p, (err, fileContent) => {
-    if (err) {
-      cb([]);
-    } else {
-      cb(JSON.parse(fileContent));
-    }
-  });
-};
-
+const db=require('../util/database');
 
 module.exports = class Product {
   constructor(id,title, imageUrl, description, price) {
@@ -29,47 +11,29 @@ module.exports = class Product {
 
 
   
-  save() {
+   save() {
+    return db.execute('insert into products (title,price,description,imageurl) values(?,?,?,?)',
+    [this.title,this.price,this.description,this.imageUrl]
+    );
     
-    getProductsFromFile(products => {
-      if(this.id){
-        const existingProductIndex=products.findIndex(prods=> prods.is===this.id);
-        const updatedProduct=[...products];
-        updatedProduct[existingProductIndex]=this;
-        fs.writeFile(p,JSON.stringify(updatedProduct),err=>{
-          console.log(err);
-        })
-      }
-      else{
-        this.id=Math.random().toString();
-        products.push(this);
-        fs.writeFile(p, JSON.stringify(products), err => {
-          console.log(err);
-        });
-      }
-      
-    });
   }
 
 static deleteById(id){
-  getProductsFromFile(products =>{
-    const updatedProduct=products.filter(p=> p.id!==id)
-     fs.writeFile(p,JSON.stringify(updatedProduct),err=>{
-      if(err){
-        console.log(err);
-      }
-     })
-  })
+ return db.execute('delete from products where products.id=?',
+  [id]);
 }
 
 
-  static fetchAll(cb) {
-    getProductsFromFile(cb);
+  static fetchAll() {
+    return db.execute('select * from products')
   }
-  static fetchById(id,cb){
-    getProductsFromFile(products =>{
-      const product=products.find(p=> p.id===id)
-       cb(product);
-    })
+
+
+  static fetchById(id){
+   
+   return db.execute('select * from products where products.id=?',
+   [id]);
   }
-};
+
+
+}
